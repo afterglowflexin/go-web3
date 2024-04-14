@@ -14,11 +14,11 @@ type Web3 struct {
 	c     *rpc.Client
 }
 
-func NewWeb3(provider string) (*Web3, error) {
-	return NewWeb3WithProxy(provider, "")
+func NewWeb3(provider string, chainID int64) (*Web3, error) {
+	return NewWeb3WithProxy(provider, "", chainID)
 }
 
-func NewWeb3WithProxy(provider, proxy string) (*Web3, error) {
+func NewWeb3WithProxy(provider, proxy string, chainID int64) (*Web3, error) {
 	c, err := rpc.NewClient(provider, proxy)
 	if err != nil {
 		return nil, err
@@ -35,6 +35,8 @@ func NewWeb3WithProxy(provider, proxy string) (*Web3, error) {
 		e.SetChainId(4)
 	} else if strings.Contains(providerLowerStr, "goerli") {
 		e.SetChainId(5)
+	} else if chainID != 0 {
+		e.SetChainId(chainID)
 	} else {
 		e.SetChainId(1)
 	}
